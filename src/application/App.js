@@ -6,7 +6,8 @@ module.exports = class App {
     }
     async start() {
         try {
-            await this.server.start();
+            const app = await this.server.start();
+            return app;
         } catch (error) {
             throw new Error(error);
         }

@@ -7,7 +7,6 @@ const { redisTtlInSeconds } = require('../../../config/config');
 const { DICTIONARY_KEY_IN_REDIS } = require('../../../config/constants');
 
 
-
 module.exports = async (req, res, next) => {
     try {
         const streamMode = JSON.parse(_.get(req, ['query', 'streamMode'], true));
@@ -26,7 +25,7 @@ module.exports = async (req, res, next) => {
         })
 
         let wordsMap = new Map();
-        let lastElement;
+        let lastElement = '';
         data.on('data', (chunk) => {
             let skipLastWord = false;
             const partialData = chunk.toString();
@@ -41,7 +40,6 @@ module.exports = async (req, res, next) => {
             if (lastElement !== '') {
                 skipLastWord = true;
             }
-            // 
 
             wordsMap = createMapFromProcessedData(wordsArray, wordsMap, skipLastWord);
         })
