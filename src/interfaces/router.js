@@ -1,8 +1,12 @@
 const { Router } = require('express')
-const tokenizerController = require('./controller');
+const {
+    modeManager,
+    tokenizerWithStream,
+    tokenizerWithoutStream,
+} = require('./middlewares/index');
 
 const router = Router();
 
-router.get('/api/tokenizer', tokenizerController);
+router.get('/api/tokenizer', modeManager, tokenizerWithStream, tokenizerWithoutStream);
 
 module.exports = router;

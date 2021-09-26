@@ -1,7 +1,9 @@
-const createMapFromProcessedData = (processedDataArray) => {
-    const wordsMap = new Map();
-    for (let word of processedDataArray) {
+const createMapFromProcessedData = (processedDataArray, wordsMap, skipLastWord = false) => {
+    for (let [index, word] of processedDataArray.entries()) {
         if (!word) {
+            continue;
+        }
+        if (index === processedDataArray.length - 1 && skipLastWord) {
             continue;
         }
         word = word.trim();
