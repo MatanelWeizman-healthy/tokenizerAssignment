@@ -22,7 +22,7 @@ module.exports = class Server {
                 .use(errorHandler);
             return this.app.listen(this.port, () => console.log(`listen in ${port}`));
         } catch (error) {
-            throw new Error(error);
+            throw (error);
         }
     }
 }
