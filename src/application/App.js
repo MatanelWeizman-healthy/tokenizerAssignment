@@ -9,7 +9,7 @@ module.exports = class App {
             const app = await this.server.start();
             return app;
         } catch (error) {
-            throw new Error(error);
+            throw (error);
         }
     }
 }
