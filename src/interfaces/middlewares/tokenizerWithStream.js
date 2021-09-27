@@ -7,7 +7,6 @@ const { redisTtlInSeconds } = require('../../../config/config');
 const { DICTIONARY_KEY_IN_REDIS } = require('../../../config/constants');
 
 
-
 module.exports = async (req, res, next) => {
     try {
         const streamMode = JSON.parse(_.get(req, ['query', 'streamMode'], true));
@@ -26,38 +25,44 @@ module.exports = async (req, res, next) => {
         })
 
         let wordsMap = new Map();
-        let lastElement;
+        let lastElement = '';
         data.on('data', (chunk) => {
-            let skipLastWord = false;
-            const partialData = chunk.toString();
-            const wordsArray = dataPreProcessing(partialData);
+            try {
+                let skipLastWord = false;
+                const partialData = chunk.toString();
+                const wordsArray = dataPreProcessing(partialData);
 
-            if (lastPreviousChunkWordWasTruncated(wordsArray[0], lastElement)) {
-                wordsArray[0] = `${lastElement}${wordsArray[0]}`;
+                if (lastPreviousChunkWordWasTruncated(wordsArray[0], lastElement)) {
+                    wordsArray[0] = `${lastElement}${wordsArray[0]}`;
+                }
+
+                lastElement = wordsArray[wordsArray.length - 1];
+
+                if (lastElement !== '') {
+                    skipLastWord = true;
+                }
+                wordsMap = createMapFromProcessedData(wordsArray, wordsMap, skipLastWord);
+            } catch (error) {
+                next(new Error(error));
             }
-
-            lastElement = wordsArray[wordsArray.length - 1];
-
-            if (lastElement !== '') {
-                skipLastWord = true;
-            }
-            // 
-
-            wordsMap = createMapFromProcessedData(wordsArray, wordsMap, skipLastWord);
         })
 
         data.on('end', async () => {
-            wordsMap = [...wordsMap.entries()];
-            if (cacheMode) {
-                await req.redisClient.set(DICTIONARY_KEY_IN_REDIS, JSON.stringify(wordsMap), {
-                    EX: redisTtlInSeconds,
-                });
+            try {
+                wordsMap = [...wordsMap.entries()];
+                if (cacheMode) {
+                    await req.redisClient.set(DICTIONARY_KEY_IN_REDIS, JSON.stringify(wordsMap), {
+                        EX: redisTtlInSeconds,
+                    });
+                }
+                res.send(wordsMap);
+            } catch (error) {
+                next(new Error(error));
             }
-            res.send(wordsMap);
         })
 
     } catch (error) {
-        throw new Error(error);
+        next(new Error(error));
     };
 }
 

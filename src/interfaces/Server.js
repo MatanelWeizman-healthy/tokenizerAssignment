@@ -20,7 +20,7 @@ module.exports = class Server {
                 .use(express.urlencoded({ extended: false }))
                 .use(router)
                 .use(errorHandler);
-            this.app.listen(this.port, () => console.log(`listen in ${port}`));
+            return this.app.listen(this.port, () => console.log(`listen in ${port}`));
         } catch (error) {
             throw new Error(error);
         }
