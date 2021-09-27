@@ -12,13 +12,13 @@ const dictionaryFromMock = '[["and",{"word":"and","repetitions":4}],["the",{"wor
 describe('e2e test', () => {
     it('tokenize words from mock server', async () => {
         try {
-            const mockListener = mockServer()
+            const mockListener = mockServer();
             console.log = jest.fn().mockReturnValue(); // for cleaner output
-            const app = new App()
-            let b = await app.start()
+            const app = new App();
+            let appListener = await app.start()
             const { data } = await axios.get(`${address}${queryForTest}`);
             expect(JSON.stringify(data)).toEqual(JSON.stringify(JSON.parse(dictionaryFromMock)));
-            b.close()
+            appListener.close()
             mockListener.close();
         } catch (error) {
             throw error;

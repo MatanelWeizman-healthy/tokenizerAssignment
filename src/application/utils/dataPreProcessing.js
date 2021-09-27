@@ -1,5 +1,5 @@
 const dataPreProcessing = (data) => {
-    const onlyNotAlphanumericRegex = /[^a-z0-9]/gi
+    const onlyNotAlphanumericRegex = /[^a-z]/gi
     const preProcessedData = data
         .toLowerCase()
         .replace(onlyNotAlphanumericRegex, ' ')

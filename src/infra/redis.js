@@ -1,8 +1,14 @@
 const { createClient } = require('redis');
 
 module.exports = async () => {
-    const client = createClient();
-    client.on('error', (err) => console.log('Redis Client Error', err));
-    await client.connect();
-    return client;
+    try {
+        const client = createClient();
+        client.on('error', (error) => {
+            throw new Error('Redis Client Error', error);
+        });
+        await client.connect();
+        return client;
+    } catch (error) {
+        throw new Error(error);
+    }
 };
