@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  redis-service:
+    image: "redis:alpine"
+  tokenizer-api:
+    build: .
+    environment:
+      - RUN_FROM_DOCKER=true
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis-service

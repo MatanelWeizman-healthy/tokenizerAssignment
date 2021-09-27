@@ -25,6 +25,6 @@ module.exports = async (req, res, next) => {
         }
         res.send(wordsMap);
     } catch (error) {
-        next(new Error(error));
+        next(error);
     };
 }

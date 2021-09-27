@@ -43,7 +43,7 @@ module.exports = async (req, res, next) => {
                 }
                 wordsMap = createMapFromProcessedData(wordsArray, wordsMap, skipLastWord);
             } catch (error) {
-                next(new Error(error));
+                next(error);
             }
         })
 
@@ -57,12 +57,12 @@ module.exports = async (req, res, next) => {
                 }
                 res.send(wordsMap);
             } catch (error) {
-                next(new Error(error));
+                next(error);
             }
         })
 
     } catch (error) {
-        next(new Error(error));
+        next(error);
     };
 }
 
