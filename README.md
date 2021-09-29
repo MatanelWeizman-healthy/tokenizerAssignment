@@ -12,7 +12,7 @@ The generic tokenizer expose a REST API that will return the words list and the 
 ### Tokenizer's modes
 
 There are several modes in which the tokenizer can be run:
-* **cacheMode** - boolean (true as default),  When true the output will be stored as a cahche for a time as defined in the configuration file (10 seconds by default). When the output is retrieved from the cache there will be an indication of this in the console.
+* **cacheMode** - boolean (true as default),  When true the output will be stored as a cache for a time as defined in the configuration file (10 seconds by default). When the output is retrieved from the cache there will be an indication of this in the console.
 
 * **streamMode** - boolean (true as default). When true he processing will be done using streams
 
